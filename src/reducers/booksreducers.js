@@ -1,4 +1,4 @@
-const reducer = function(state = { books: [] }, action) {
+export function booksReducers(state = { books: [] }, action) {
   switch (action.type) {
     case "post_book":
       return { books: [...state.books, ...action.payload] };
@@ -33,4 +33,5 @@ const reducer = function(state = { books: [] }, action) {
       };
       break;
   }
-};
+  return state;
+}
