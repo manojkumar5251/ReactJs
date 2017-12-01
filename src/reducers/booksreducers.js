@@ -1,7 +1,15 @@
-export function booksReducers(state = { books: [] }, action) {
+export function booksReducers(
+  state = {
+    books: [
+      { id: 1, name: "Da vince code", author: "Dan Brown", price: 10 },
+      { id: 2, name: "Digital code", author: "Dan Brown", price: 20 }
+    ]
+  },
+  action
+) {
   switch (action.type) {
-    case "post_book":
-      return { books: [...state.books, ...action.payload] };
+    case "get_book":
+      return { ...state, books: [...state.books] };
       break;
 
     case "delete_book":

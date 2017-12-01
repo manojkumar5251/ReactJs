@@ -1,10 +1,17 @@
+import React from "react";
+import { render } from "react-dom";
+
 import { applyMiddleware, createStore } from "redux";
 import logger from "redux-logger";
+
+import { Provider } from "react-redux";
 
 import reducers from "./reducers/index";
 
 import { addtocart } from "./actions/cartactions";
 import { postbook, deletebook, updatebook } from "./actions/booksactions";
+
+import BooksList from "./components/pages/bookslist";
 
 const middleware = applyMiddleware(logger);
 const store = createStore(reducers, middleware);
@@ -12,15 +19,19 @@ const store = createStore(reducers, middleware);
 //   console.log("current state ", store.getState());
 // });
 
-store.dispatch(
-  postbook([
-    { id: 1, name: "Da vince code", author: "Dan Brown", price: 10 },
-    { id: 2, name: "Digital code", author: "Dan Brown", price: 20 }
-  ])
+render(
+  <Provider store={store}>
+    <BooksList />
+  </Provider>,
+  document.getElementById("app")
 );
 
-store.dispatch(deletebook({ id: 1 }));
+// store.dispatch(
+//   postbook()
+// );
 
-store.dispatch(updatebook({ id: 2, name: "Angels and Demons" }));
+// store.dispatch(deletebook({ id: 1 }));
 
-store.dispatch(addtocart([{ id: 1 }]));
+// store.dispatch(updatebook({ id: 2, name: "Angels and Demons" }));
+
+// store.dispatch(addtocart([{ id: 1 }]));
