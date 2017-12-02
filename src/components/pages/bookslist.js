@@ -30,7 +30,9 @@ class BooksList extends React.Component {
 function mapStateToProps(state) {
   return { books: state.books.books };
 }
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ getbook }, dispatch);
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(BooksList);

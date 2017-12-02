@@ -9,7 +9,7 @@ export function booksReducers(
 ) {
   switch (action.type) {
     case "get_book":
-      return { ...state, books: [...state.books] };
+      return { books: [...state.books] };
       break;
 
     case "delete_book":
