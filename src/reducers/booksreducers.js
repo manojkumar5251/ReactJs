@@ -12,6 +12,10 @@ export function booksReducers(
       return { books: [...state.books] };
       break;
 
+    case "post_book":
+      return { books: [...state.books, ...action.payload] };
+      break;
+
     case "delete_book":
       const book2del = [...state.books];
       const indextodel = book2del.findIndex(function(book) {
