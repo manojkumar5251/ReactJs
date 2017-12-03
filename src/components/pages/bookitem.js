@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col, Well, Button } from "react-bootstrap";
+import { connect } from "react-redux";
 
 class BookItem extends React.Component {
   render() {
