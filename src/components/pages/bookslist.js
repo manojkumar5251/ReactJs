@@ -6,6 +6,7 @@ import { getbook } from "../../actions/booksactions";
 
 import BookItem from "./bookitem";
 import BooksForm from "./booksform";
+import Cart from "./cart";
 
 class BooksList extends React.Component {
   componentDidMount() {
@@ -14,9 +15,9 @@ class BooksList extends React.Component {
   render() {
     const booksList = this.props.books.map(function(bookarr) {
       return (
-        <Col xs={12} sm={6} md={4} key={bookarr.id}>
+        <Col xs={12} sm={6} md={4} key={bookarr._id}>
           <BookItem
-            id={bookarr.id}
+            _id={bookarr._id}
             name={bookarr.name}
             author={bookarr.author}
             price={bookarr.price}
@@ -27,6 +28,9 @@ class BooksList extends React.Component {
 
     return (
       <Grid>
+        <Row>
+          <Cart />
+        </Row>
         <Row style={{ marginTop: "15px" }}>
           <Col xs={12} sm={6}>
             <BooksForm />

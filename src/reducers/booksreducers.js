@@ -1,8 +1,8 @@
 export function booksReducers(
   state = {
     books: [
-      { id: 1, name: "Da vince code", author: "Dan Brown", price: 10 },
-      { id: 2, name: "Digital code", author: "Dan Brown", price: 20 }
+      { _id: 1, name: "Da vince code", author: "Dan Brown", price: 10 },
+      { _id: 2, name: "Digital code", author: "Dan Brown", price: 20 }
     ]
   },
   action
@@ -19,7 +19,7 @@ export function booksReducers(
     case "delete_book":
       const book2del = [...state.books];
       const indextodel = book2del.findIndex(function(book) {
-        return book.id === action.payload.id;
+        return book._id === action.payload._id;
       });
       return {
         books: [
@@ -32,7 +32,7 @@ export function booksReducers(
     case "update_book":
       const book2upt = [...state.books];
       const indextoupt = book2upt.findIndex(function(book) {
-        return book.id === action.payload.id;
+        return book._id === action.payload._id;
       });
       const newbook = { ...book2upt[indextoupt], name: action.payload.name };
       console.log(newbook);
