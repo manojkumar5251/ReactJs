@@ -37,6 +37,19 @@ class Cart extends React.Component {
     }
   }
 
+  constructor() {
+    super();
+    this.state = { showModal: false };
+  }
+
+  open() {
+    this.setState({ showModal: true });
+  }
+
+  close() {
+    this.setState({ showModal: false });
+  }
+
   render() {
     if (this.props.cart[0]) {
       return this.renderCart();
@@ -105,19 +118,27 @@ class Cart extends React.Component {
         <Row>
           <Col xs={12}>
             <h6>Total amount:</h6>
-            <Button bsStyle="success" bsSize="snall">
+            <Button
+              onClick={this.open.bind(this)}
+              bsStyle="success"
+              bsSize="small"
+            >
               PROCEED TO CHECKOUT
             </Button>
           </Col>
         </Row>
         <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title> Thank You! </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h6>TEST</h6>
+            <h6>Your item has been saved </h6>
+            <p>You will recieve an email confirmation</p>
           </Modal.Body>
           <Modal.Footer>
+            <Col xs={6}>
+              <h6>Total $: </h6>
+            </Col>
             <Button onClick={this.close.bind(this)}>Close</Button>
           </Modal.Footer>
         </Modal>
