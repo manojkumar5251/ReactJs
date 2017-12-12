@@ -29034,6 +29034,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 exports.cartReducers = cartReducers;
 exports.totals = totals;
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function cartReducers() {
@@ -29042,10 +29044,11 @@ function cartReducers() {
 
   switch (action.type) {
     case "add_to_cart":
-      return {
+      return _defineProperty({
         cart: [].concat(_toConsumableArray(state), _toConsumableArray(action.payload)),
-        totalamount: totals(action.payload).amount
-      };
+        totalamount: totals(action.payload).amount,
+        totalqty: totals(action.payload).qty
+      }, "totalqty", totals(action.payload).qty);
       break;
 
     case "update_cart":
@@ -29062,13 +29065,18 @@ function cartReducers() {
 
       var cartupt = [].concat(_toConsumableArray(book2upt.slice(0, indextoupt)), [newbook], _toConsumableArray(book2upt.slice(indextoupt + 1)));
 
-      return { cart: cartupt, totalamount: totals(cartupt).amount };
+      return {
+        cart: cartupt,
+        totalamount: totals(cartupt).amount,
+        totalqty: totals(cartupt).qty
+      };
       break;
 
     case "delete_cart_item":
       return {
         cart: [].concat(_toConsumableArray(state), _toConsumableArray(action.payload)),
-        totalamount: totals(action.payload).amount
+        totalamount: totals(action.payload).amount,
+        totalqty: totals(action.payload).qty
       };
       break;
   }
@@ -29083,7 +29091,13 @@ function totals(payloadarr) {
     return a + b;
   }, 0);
 
-  return { amount: totamt.toFixed(2) };
+  var totqty = payloadarr.map(function (qty) {
+    return qty.quantity;
+  }).reduce(function (a, b) {
+    return a + b;
+  }, 0);
+
+  return { amount: totamt.toFixed(2), qty: totqty };
 }
 
 /***/ }),

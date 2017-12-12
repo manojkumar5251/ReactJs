@@ -3,7 +3,9 @@ export function cartReducers(state = { cart: [] }, action) {
     case "add_to_cart":
       return {
         cart: [...state, ...action.payload],
-        totalamount: totals(action.payload).amount
+        totalamount: totals(action.payload).amount,
+        totalqty: totals(action.payload).qty,
+        totalqty: totals(action.payload).qty
       };
       break;
 
@@ -26,13 +28,18 @@ export function cartReducers(state = { cart: [] }, action) {
         ...book2upt.slice(indextoupt + 1)
       ];
 
-      return { cart: cartupt, totalamount: totals(cartupt).amount };
+      return {
+        cart: cartupt,
+        totalamount: totals(cartupt).amount,
+        totalqty: totals(cartupt).qty
+      };
       break;
 
     case "delete_cart_item":
       return {
         cart: [...state, ...action.payload],
-        totalamount: totals(action.payload).amount
+        totalamount: totals(action.payload).amount,
+        totalqty: totals(action.payload).qty
       };
       break;
   }
@@ -49,5 +56,13 @@ export function totals(payloadarr) {
       return a + b;
     }, 0);
 
-  return { amount: totamt.toFixed(2) };
+  const totqty = payloadarr
+    .map(function(qty) {
+      return qty.quantity;
+    })
+    .reduce(function(a, b) {
+      return a + b;
+    }, 0);
+
+  return { amount: totamt.toFixed(2), qty: totqty };
 }
