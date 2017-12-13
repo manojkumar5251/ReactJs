@@ -12,6 +12,8 @@ import { addtocart } from "./actions/cartactions";
 import { postbook, deletebook, updatebook } from "./actions/booksactions";
 
 import BooksList from "./components/pages/bookslist";
+import Menu from "./components/menu";
+import Footer from "./components/footer";
 
 const middleware = applyMiddleware(logger);
 const store = createStore(reducers, middleware);
@@ -21,7 +23,11 @@ const store = createStore(reducers, middleware);
 
 render(
   <Provider store={store}>
-    <BooksList />
+    <div>
+      <Menu />
+      <BooksList />
+      <Footer />
+    </div>
   </Provider>,
   document.getElementById("app")
 );

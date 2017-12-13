@@ -19,7 +19,7 @@ export function booksReducers(
     case "delete_book":
       const book2del = [...state.books];
       const indextodel = book2del.findIndex(function(book) {
-        return book._id === action.payload._id;
+        return book._id == action.payload;
       });
       return {
         books: [

@@ -9818,6 +9818,14 @@ var _bookslist = __webpack_require__(193);
 
 var _bookslist2 = _interopRequireDefault(_bookslist);
 
+var _menu = __webpack_require__(337);
+
+var _menu2 = _interopRequireDefault(_menu);
+
+var _footer = __webpack_require__(338);
+
+var _footer2 = _interopRequireDefault(_footer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var middleware = (0, _redux.applyMiddleware)(_reduxLogger2.default);
@@ -9829,7 +9837,13 @@ var store = (0, _redux.createStore)(_index2.default, middleware);
 (0, _reactDom.render)(_react2.default.createElement(
   _reactRedux.Provider,
   { store: store },
-  _react2.default.createElement(_bookslist2.default, null)
+  _react2.default.createElement(
+    "div",
+    null,
+    _react2.default.createElement(_menu2.default, null),
+    _react2.default.createElement(_bookslist2.default, null),
+    _react2.default.createElement(_footer2.default, null)
+  )
 ), document.getElementById("app"));
 
 // store.dispatch(
@@ -28996,7 +29010,7 @@ function booksReducers() {
     case "delete_book":
       var book2del = [].concat(_toConsumableArray(state.books));
       var indextodel = book2del.findIndex(function (book) {
-        return book._id === action.payload._id;
+        return book._id == action.payload;
       });
       return {
         books: [].concat(_toConsumableArray(book2del.slice(0, indextodel)), _toConsumableArray(book2del.slice(indextodel + 1)))
@@ -40529,7 +40543,7 @@ var BookItem = function (_React$Component) {
         var _id = this.props._id;
 
         var cartindex = this.props.cart.findIndex(function (cart) {
-          return cart._id = _id;
+          return cart._id === _id;
         });
 
         if (cartindex === -1) {
@@ -40647,8 +40661,22 @@ var BooksForm = function (_React$Component) {
       this.props.postbook(book);
     }
   }, {
+    key: "onDelete",
+    value: function onDelete() {
+      var bookId = (0, _reactDom.findDOMNode)(this.refs.delete).value;
+      this.props.deletebook(bookId);
+    }
+  }, {
     key: "render",
     value: function render() {
+      var booklist = this.props.books.map(function (bookarr) {
+        return _react2.default.createElement(
+          "option",
+          { key: bookarr._id },
+          bookarr._id
+        );
+      });
+
       return _react2.default.createElement(
         _reactBootstrap.Well,
         null,
@@ -40690,6 +40718,38 @@ var BooksForm = function (_React$Component) {
             { bsStyle: "primary", onClick: this.handleSubmit.bind(this) },
             "Save Book"
           )
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Panel,
+          { style: { marginTop: "25px" } },
+          _react2.default.createElement(
+            _reactBootstrap.FormGroup,
+            { controlId: "formControlsSelect" },
+            _react2.default.createElement(
+              _reactBootstrap.ControlLabel,
+              null,
+              "Select a book id to delete"
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.FormControl,
+              {
+                ref: "delete",
+                componentClass: "select",
+                placeholder: "select"
+              },
+              _react2.default.createElement(
+                "option",
+                { value: "select" },
+                "select"
+              ),
+              booklist
+            )
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { onClick: this.onDelete.bind(this), bsStyle: "danger" },
+            "Delete Book"
+          )
         )
       );
     }
@@ -40698,10 +40758,13 @@ var BooksForm = function (_React$Component) {
   return BooksForm;
 }(_react2.default.Component);
 
-function mapDispatchToProps(dispatch) {
-  return (0, _redux.bindActionCreators)({ postbook: _booksactions.postbook }, dispatch);
+function mapStateToProps(state) {
+  return { books: state.books.books };
 }
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(BooksForm);
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({ postbook: _booksactions.postbook, deletebook: _booksactions.deletebook }, dispatch);
+}
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksForm);
 
 /***/ }),
 /* 335 */
@@ -40903,7 +40966,9 @@ var Cart = function (_React$Component) {
             _react2.default.createElement(
               "h6",
               null,
-              "Total amount:"
+              "Total amount: ",
+              this.props.totalamount,
+              " "
             ),
             _react2.default.createElement(
               _reactBootstrap.Button,
@@ -40951,7 +41016,8 @@ var Cart = function (_React$Component) {
               _react2.default.createElement(
                 "h6",
                 null,
-                "Total $: "
+                "Total $: ",
+                this.props.totalamount
               )
             ),
             _react2.default.createElement(
@@ -40969,13 +41035,174 @@ var Cart = function (_React$Component) {
 }(_react2.default.Component);
 
 function mapStateToProps(state) {
-  return { cart: state.cart.cart };
+  return { cart: state.cart.cart, totalamount: state.cart.totalamount };
 }
 
 function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({ deletecartitem: _cartactions.deletecartitem, updatecart: _cartactions.updatecart }, dispatch);
 }
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);
+
+/***/ }),
+/* 336 */,
+/* 337 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = __webpack_require__(48);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Menu = function (_React$Component) {
+  _inherits(Menu, _React$Component);
+
+  function Menu() {
+    _classCallCheck(this, Menu);
+
+    return _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).apply(this, arguments));
+  }
+
+  _createClass(Menu, [{
+    key: "render",
+    value: function render() {
+      return _react2.default.createElement(
+        _reactBootstrap.Navbar,
+        { inverse: true, fixedTop: true },
+        _react2.default.createElement(
+          _reactBootstrap.Navbar.Header,
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Navbar.Brand,
+            null,
+            _react2.default.createElement(
+              "a",
+              { href: "/" },
+              "React-Bootstrap"
+            )
+          ),
+          _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Navbar.Collapse,
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Nav,
+            null,
+            _react2.default.createElement(
+              _reactBootstrap.NavItem,
+              { eventKey: 1, href: "/about" },
+              "About"
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.NavItem,
+              { eventKey: 2, href: "/contact" },
+              "Contact Us"
+            )
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Nav,
+            { pullRight: true },
+            _react2.default.createElement(
+              _reactBootstrap.NavItem,
+              { eventKey: 1, href: "/admin" },
+              "Admin"
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.NavItem,
+              { eventKey: 2, href: "/cart" },
+              "Your Cart ",
+              _react2.default.createElement(
+                _reactBootstrap.Badge,
+                { className: "badge" },
+                "1"
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return Menu;
+}(_react2.default.Component);
+
+exports.default = Menu;
+
+/***/ }),
+/* 338 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Footer = function (_React$Component) {
+  _inherits(Footer, _React$Component);
+
+  function Footer() {
+    _classCallCheck(this, Footer);
+
+    return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));
+  }
+
+  _createClass(Footer, [{
+    key: "render",
+    value: function render() {
+      return _react2.default.createElement(
+        "footer",
+        { className: "footer text-center" },
+        _react2.default.createElement(
+          "div",
+          { className: "container" },
+          _react2.default.createElement(
+            "p",
+            { className: "footer-text" },
+            "Copyright 2017 Bookshop. All rights reserved."
+          )
+        )
+      );
+    }
+  }]);
+
+  return Footer;
+}(_react2.default.Component);
+
+exports.default = Footer;
 
 /***/ })
 /******/ ]);

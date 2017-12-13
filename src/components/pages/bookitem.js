@@ -21,7 +21,7 @@ class BookItem extends React.Component {
       let _id = this.props._id;
 
       let cartindex = this.props.cart.findIndex(function(cart) {
-        return (cart._id = _id);
+        return cart._id === _id;
       });
 
       if (cartindex === -1) {
