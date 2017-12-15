@@ -1,9 +1,10 @@
 import React from "react";
 import { render } from "react-dom";
 
+import { Router, Route, IndexRoute, browserHistory } from "react-router";
+
 import { applyMiddleware, createStore } from "redux";
 import logger from "redux-logger";
-
 import { Provider } from "react-redux";
 
 import reducers from "./reducers/index";
@@ -12,8 +13,9 @@ import { addtocart } from "./actions/cartactions";
 import { postbook, deletebook, updatebook } from "./actions/booksactions";
 
 import BooksList from "./components/pages/bookslist";
-import Menu from "./components/menu";
-import Footer from "./components/footer";
+import Cart from "./components/pages/cart";
+import BooksForm from "./components/pages/booksform";
+import Main from "./main";
 
 const middleware = applyMiddleware(logger);
 const store = createStore(reducers, middleware);
@@ -21,16 +23,21 @@ const store = createStore(reducers, middleware);
 //   console.log("current state ", store.getState());
 // });
 
-render(
+const Routes = (
   <Provider store={store}>
     <div>
-      <Menu />
-      <BooksList />
-      <Footer />
+      <Router history={browserHistory}>
+        <Route path="/" component={Main}>
+          <IndexRoute component={BooksList} />
+          <Route path="/admin" component={BooksForm} />
+          <Route path="/cart" component={Cart} />
+        </Route>
+      </Router>
     </div>
-  </Provider>,
-  document.getElementById("app")
+  </Provider>
 );
+
+render(Routes, document.getElementById("app"));
 
 // store.dispatch(
 //   postbook()
